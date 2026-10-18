@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Agent Text Editor</string>
+    <string name="editor_hint">Write something here...</string>
+    <string name="save">Save text</string>
+    <string name="saved">Text saved</string>
+    <string name="save_failed">Could not save text</string>
 </resources>

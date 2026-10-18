@@ -2,21 +2,29 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
     android:orientation="vertical"
-    android:padding="32dp">
+    android:padding="24dp">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Agent Text Editor"
+        android:text="@string/app_name"
         android:textSize="22sp"
         android:textStyle="bold" />
 
-    <TextView
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/editor"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="16dp"
+        android:gravity="top|start"
+        android:hint="@string/editor_hint"
+        android:inputType="textCapSentences|textMultiLine" />
+
+    <Button
+        android:id="@+id/save_button"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="GitHub Actions validation build"
-        android:textSize="14sp" />
+        android:text="@string/save" />
 </LinearLayout>

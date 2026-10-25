@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.PaperAI" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">#F6FAF7</item>
+    </style>
+</resources>

@@ -1,0 +1,67 @@
+name: Universal Build
+
+on:
+  workflow_dispatch:  # 关键：允许在网页或工具里手动触发
+
+jobs:
+  detect-and-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Detect Project Type
+        id: detect
+        run: |
+          if [ -f "package.json" ]; then
+            echo "type=node" >> $GITHUB_OUTPUT
+            echo "检测到 Node.js 项目"
+          elif [ -f "android/gradlew" ] || [ -f "gradlew" ]; then
+            echo "type=android" >> $GITHUB_OUTPUT
+            echo "检测到 Android 原生项目"
+          elif [ -f "pubspec.yaml" ]; then
+            echo "type=flutter" >> $GITHUB_OUTPUT
+            echo "检测到 Flutter 项目"
+          else
+            echo "type=unknown" >> $GITHUB_OUTPUT
+            echo "未识别到已知项目类型"
+          fi
+
+      # ----- Node.js 构建 -----
+      - name: Setup Node.js
+        if: steps.detect.outputs.type == 'node'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install & Build (Node)
+        if: steps.detect.outputs.type == 'node'
+        run: |
+          npm ci
+          npm run build --if-present
+
+      # ----- Android 构建 -----
+      - name: Setup JDK & Gradle
+        if: steps.detect.outputs.type == 'android'
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Build APK (Android)
+        if: steps.detect.outputs.type == 'android'
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon
+
+      # ----- Flutter 构建 -----
+      - name: Setup Flutter
+        if: steps.detect.outputs.type == 'flutter'
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.0'
+
+      - name: Build (Flutter)
+        if: steps.detect.outputs.type == 'flutter'
+        run: flutter build apk --debug
